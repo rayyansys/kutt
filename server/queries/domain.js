@@ -1,15 +1,17 @@
-const redis = require("../redis");
 const knex = require("../knex");
+const env = require("../env");
 
 async function find(match) {
-  if (match.address) {
-    const cachedDomain = await redis.client.get(redis.key.domain(match.address));
+  if (env.REDIS_ENABLED && match.address) {
+    const r = require("../redis");
+    const cachedDomain = await r.client.get(redis.key.domain(match.address));
     if (cachedDomain) return JSON.parse(cachedDomain);
   }
   
   const domain = await knex("domains").where(match).first();
   
-  if (domain) {
+  if (env.REDIS_ENABLED && domain) {
+    const redis = require("../redis");
     redis.client.set(
       redis.key.domain(domain.address),
       JSON.stringify(domain),
@@ -53,7 +55,10 @@ async function add(params) {
     domain = response;
   }
   
-  redis.remove.domain(domain);
+  if (env.REDIS_ENABLED) {
+    const redis = require('../redis');
+    redis.remove.domain(domain);
+  }
   
   return domain;
 }
@@ -63,7 +68,10 @@ async function update(match, update) {
     .where(match)
     .update({ ...update, updated_at: new Date().toISOString() }, "*");
   
-  domains.forEach(redis.remove.domain);
+  if (env.REDIS_ENABLED) {
+    const redis = require('../redis');
+    domains.forEach(redis.remove.domain);
+  }
   
   return domains;
 }

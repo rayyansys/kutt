@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const asyncHandler = require("express-async-handler");
-const cors = require("cors");
 
 const validators = require("../handlers/validators");
 
@@ -21,7 +20,6 @@ const router = Router();
 
 router.post(
   "/",
-  cors(),
   asyncHandler(auth.apikey),
   asyncHandler(env.DISALLOW_ANONYMOUS_LINKS ? auth.jwt : auth.jwtLoose),
   asyncHandler(auth.cooldown),

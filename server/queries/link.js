@@ -1,9 +1,8 @@
 const bcrypt = require("bcryptjs");
 
-// FIXME: circular dependency
-const CustomError = require("../utils").CustomError;
-const redis = require("../redis");
+const CustomError = require("../utils/CustomError").CustomError;
 const knex = require("../knex");
+const env = require("../env");
 
 const selectable = [
   "links.id",
@@ -84,9 +83,10 @@ async function get(match, params) {
 }
 
 async function find(match) {
-  if (match.address && match.domain_id) {
-    const key = redis.key.link(match.address, match.domain_id);
-    const cachedLink = await redis.client.get(key);
+  if (env.REDIS_ENABLED && match.address && match.domain_id) {
+    const r = require('../redis');
+    const key = r.key.link(match.address, match.domain_id);
+    const cachedLink = await r.client.get(key);
     if (cachedLink) return JSON.parse(cachedLink);
   }
   
@@ -96,7 +96,8 @@ async function find(match) {
     .leftJoin("domains", "links.domain_id", "domains.id")
     .first();
   
-  if (link) {
+  if (env.REDIS_ENABLED && link) {
+    const redis = require('../redis');
     const key = redis.key.link(link.address, link.domain_id);
     redis.client.set(key, JSON.stringify(link), "EX", 60 * 60 * 2);
   }
@@ -138,7 +139,10 @@ async function remove(match) {
   }
   
   const deletedLink = await knex("links").where("id", link.id).delete();
-  redis.remove.link(link);
+  if (env.REDIS_ENABLED) {
+    const redis = require('../redis');
+    redis.remove.link(link);
+  }
   
   return !!deletedLink;
 }
@@ -153,8 +157,10 @@ async function batchRemove(match) {
   });
   
   const links = await findQuery;
-  
-  links.forEach(redis.remove.link);
+  if (env.REDIS_ENABLED) {
+    const redis = require('../redis');
+    links.forEach(redis.remove.link);
+  }
   
   await deleteQuery.delete();
 }
@@ -168,8 +174,11 @@ async function update(match, update) {
   const links = await knex("links")
     .where(match)
     .update({ ...update, updated_at: new Date().toISOString() }, "*");
-  
-  links.forEach(redis.remove.link);
+
+    if (env.REDIS_ENABLED) {
+      const redis = require('../redis');
+      links.forEach(redis.remove.link);
+    }
   
   return links;
 }

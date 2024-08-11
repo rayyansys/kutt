@@ -1,8 +1,7 @@
 const { validationResult } = require("express-validator");
 const signale = require("signale");
 
-const { logger } = require("../config/winston");
-const { CustomError } = require("../utils");
+const { CustomError } = require("../utils/CustomError");
 const env = require("../env");
 
 // export const ip: Handler = (req, res, next) => {
@@ -20,10 +19,11 @@ function error(error, _req, res, _next) {
   }
 
   if (error instanceof CustomError) {
-    return res.status(error.statusCode || 500).json({ error: error.message });
+    res.status(error.statusCode || 500).json({ error: error.message });
+    return;
   }
 
-  return res.status(500).json({ error: "An error occurred." });
+  res.status(500).json({ error: "An error occurred." });
 };
 
 function verify(template) {

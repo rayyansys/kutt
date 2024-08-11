@@ -1,13 +1,8 @@
 const env = require("./env");
 
-// import asyncHandler from "express-async-handler";
-// import passport from "passport";
 const cookieParser = require("cookie-parser");
 const express = require("express");
-const helmet = require("helmet");
-const morgan = require("morgan");
 const path = require("path");
-const hbs = require("hbs");
 
 const helpers = require("./handlers/helpers");
 // import * as links from "./handlers/links";
@@ -15,7 +10,6 @@ const helpers = require("./handlers/helpers");
 const routes = require("./routes");
 const renders = require("./renders");
 const utils = require("./utils");
-const { stream } = require("./config/winston")
 
 // import "./cron";
 require("./passport");
@@ -25,11 +19,6 @@ const app = express();
 // TODO: comments
 app.set("trust proxy", true);
 
-if (env.isDev) {
-  app.use(morgan("combined", { stream }));
-}
-
-app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -5,10 +5,9 @@ const bcrypt = require("bcryptjs");
 const nanoid = require("nanoid");
 const axios = require("axios");
 
-const { CustomError } = require("../utils");
+const { CustomError } = require("../utils/CustomError").CustomError;
 const query = require("../queries");
 const utils = require("../utils");
-const redis = require("../redis");
 const mail = require("../mail");
 const env = require("../env");
 
@@ -201,7 +200,10 @@ async function changePassword(req, res) {
 async function generateApiKey(req, res) {
   const apikey = nanoid(40);
   
-  redis.remove.user(req.user);
+  if (env.REDIS_ENABLED) {
+    const redis = require("../redis");
+    redis.remove.user(req.user);
+  }
   
   const [user] = await query.user.update({ id: req.user.id }, { apikey });
   
@@ -291,7 +293,10 @@ async function changeEmailRequest(req, res) {
     }
   );
   
-  redis.remove.user(updatedUser);
+  if (env.REDIS_ENABLED) {
+    const redis = require("../redis");
+    redis.remove.user(updatedUser);
+  }
   
   if (updatedUser) {
     await mail.changeEmail({ ...updatedUser, email });
@@ -330,7 +335,10 @@ async function changeEmail(req, res, next) {
       }
     );
   
-    redis.remove.user(foundUser);
+    if (env.REDIS_ENABLED) {
+      const redis = require("../redis");
+      redis.remove.user(foundUser);
+    }
   
     if (user) {
       const token = utils.signToken(user);

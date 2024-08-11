@@ -8,6 +8,8 @@
     "docker:build": "docker build -t kutt .",
     "docker:run": "docker run -p 3000:3000 --env-file .env -d kutt:latest",
     "dev": "node --watch server/server.js",
+    "v3:dev": "node --watch-path=server --watch-path=.env --env-file=.env --experimental-sqlite --experimental-detect-module --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --no-warnings=ExperimentalWarning server/server.js",
+    "v3:module_graph": "madge server/server.js -i graph.svg --include-npm --ts-config tsconfig.json",
     "dev:backup": "npm run migrate && cross-env NODE_ENV=development nodemon server/server.ts",
     "build": "rimraf production-server && tsc --project tsconfig.json && copyfiles -f \"server/mail/*.html\" production-server/mail && next build client/ ",
     "start": "npm run migrate && cross-env NODE_ENV=production node production-server/server.js",

@@ -11,7 +11,7 @@ const query = require("../queries");
 const utils = require("../utils");
 const env = require("../env");
 
-const CustomError = utils.CustomError;
+const CustomError = require('../utils/CustomError').CustomError;
 const dnsLookup = promisify(dns.lookup);
 
 // export const get: Handler = async (req, res) => {
