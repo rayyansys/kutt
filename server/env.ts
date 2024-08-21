@@ -14,6 +14,8 @@ const env = cleanEnv(process.env, {
   DB_USER: str(),
   DB_PASSWORD: str(),
   DB_SSL: bool({ default: false }),
+  DB_SSL_SKIP_VERIFY: bool({ default: false }),
+  DB_SSL_CERT: str({ default: "" }),
   DB_POOL_MIN: num({ default: 2 }),
   DB_POOL_MAX: num({ default: 10 }),
   REDIS_HOST: str({ default: "127.0.0.1" }),

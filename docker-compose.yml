@@ -10,14 +10,17 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - .docker.env
     environment:
       DB_HOST: postgres
       DB_NAME: kutt
       DB_USER: user
       DB_PASSWORD: pass
       REDIS_HOST: redis
-
+      # DB_SSL_CERT: |
+      #   -----BEGIN CERTIFICATE-----
+      #   ...
+      #   -----END CERTIFICATE-----
   redis:
     image: redis:6.0-alpine
     volumes:
