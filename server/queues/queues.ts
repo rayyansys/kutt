@@ -1,15 +1,10 @@
 import Queue from "bull";
 import path from "path";
+import { pickCredentials } from "../redis-credentials";
 
-import env from "../env";
+const redis = pickCredentials(["host", "port", "password"]);
 
-const redis = {
-  port: env.REDIS_PORT,
-  host: env.REDIS_HOST,
-  ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD })
-};
-
-const removeJob = job => job.remove();
+const removeJob = (job) => job.remove();
 
 export const visit = new Queue("visit", { redis });
 

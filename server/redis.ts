@@ -1,13 +1,6 @@
-import Redis from "ioredis";
+import { pickCredentials } from "./redis-credentials";
 
-import env from "./env";
-
-const client = new Redis({
-  host: env.REDIS_HOST,
-  port: env.REDIS_PORT,
-  db: env.REDIS_DB,
-  ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD })
-});
+const client = pickCredentials(["host", "port", "password", "db"]);
 
 export default client;
 
