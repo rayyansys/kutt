@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - develop
+      - gh-actions # test branch
     tags:
       - 'v*'
 
