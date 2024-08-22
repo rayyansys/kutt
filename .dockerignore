@@ -1,4 +1,7 @@
 .env
+.docker.env
 .git
 node_modules
 production-server
+docker-compose.yml
+Dockerfile

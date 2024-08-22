@@ -1,7 +1,8 @@
 import env from "./env";
 
+let ssl = {};
 if (env.DB_SSL) {
-  const ssl = { rejectUnauthorized: !env.DB_SSL_SKIP_VERIFY }
+  ssl = { rejectUnauthorized: !env.DB_SSL_SKIP_VERIFY }
   if (env.DB_SSL_CERT) {
     ssl['ca'] = env.DB_SSL_CERT
   }

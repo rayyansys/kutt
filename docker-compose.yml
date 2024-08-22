@@ -1,8 +1,6 @@
-version: "3"
-
 services:
   kutt:
-    image: kutt/kutt
+    build: .
     depends_on:
       - postgres
       - redis
@@ -12,12 +10,11 @@ services:
     env_file:
       - .docker.env
     environment:
-      DB_HOST: postgres
-      DB_NAME: kutt
-      DB_USER: user
-      DB_PASSWORD: pass
-      REDIS_HOST: redis
       # DB_SSL_CERT: |
+      #   -----BEGIN CERTIFICATE-----
+      #   ...
+      #   -----END CERTIFICATE-----
+      # REDIS_TLS_CERT: |
       #   -----BEGIN CERTIFICATE-----
       #   ...
       #   -----END CERTIFICATE-----
