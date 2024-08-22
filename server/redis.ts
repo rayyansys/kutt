@@ -1,6 +1,7 @@
-import { pickCredentials } from "./redis-credentials";
+import REDIS_CREDENTIALS from "./redis-credentials";
+import Redis from "ioredis";
 
-const client = pickCredentials(["host", "port", "password", "db"]);
+const client = new Redis(REDIS_CREDENTIALS);
 
 export default client;
 
