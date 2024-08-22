@@ -22,7 +22,7 @@ jobs:
         name: Determine target image name
         id: image-name
         run: |
-          IMAGE_ID=ghcr.io/$IMAGE_NAME
+          IMAGE_ID=ghcr.io/${{ env.docker_repository }}
 
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
