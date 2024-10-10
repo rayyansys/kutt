@@ -14,7 +14,7 @@ export const ip: Handler = (req, res, next) => {
 
 // eslint-disable-next-line
 export const error: ErrorRequestHandler = (error, _req, res, _next) => {
-  logger.error(error);
+  logger.error(error.stack);
 
   if (env.isDev) {
     signale.fatal(error);
