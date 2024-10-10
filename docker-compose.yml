@@ -1,6 +1,7 @@
 services:
   kutt:
     build: .
+    platform: linux/amd64
     depends_on:
       - postgres
       - redis
@@ -9,7 +10,7 @@ services:
       - "3000:3000"
     env_file:
       - .docker.env
-    environment:
+    environment: {}
       # DB_SSL_CERT: |
       #   -----BEGIN CERTIFICATE-----
       #   ...
@@ -20,11 +21,13 @@ services:
       #   -----END CERTIFICATE-----
   redis:
     image: redis:6.0-alpine
+    platform: linux/amd64
     volumes:
       - redis_data:/data
 
   postgres:
     image: postgres:12-alpine
+    platform: linux/amd64
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
