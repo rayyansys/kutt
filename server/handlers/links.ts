@@ -51,7 +51,7 @@ export const create: Handler = async (req: CreateLinkReq, res) => {
     domain,
     expire_in
   } = req.body;
-  const domain_id = 1;
+  const domain_id = 2;
 
   const targetDomain = utils.removeWww(URL.parse(target).hostname);
 
