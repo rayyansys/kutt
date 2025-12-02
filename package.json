@@ -60,7 +60,7 @@
     "nanoid": "^2.1.11",
     "next": "^12.3.3",
     "node-cron": "^3.0.2",
-    "nodemailer": "^6.8.0",
+    "nodemailer": "^7.0.11",
     "p-queue": "^7.3.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
